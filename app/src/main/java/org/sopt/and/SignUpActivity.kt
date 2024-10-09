@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -174,7 +175,7 @@ fun SignUpForm(application: Application) {
                 if (validateSignUp(email = email, password = password)) {
                     val intent = Intent(application, SignInAcitivity::class.java)
                     intent.apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         putExtra("email", email)
                         putExtra("password", password)
                     }
