@@ -151,7 +151,7 @@ fun SignUpForm(application: Application) {
                 onClick = { isPasswordVisible = !isPasswordVisible },
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(top=20.dp, end=8.dp)
+                    .padding(top = 20.dp, end = 8.dp)
                     .background(Color.White.copy(alpha = 0f))
             ) {
                 Text(
@@ -172,11 +172,11 @@ fun SignUpForm(application: Application) {
         TextButton(
             onClick = {
                 if (validateSignUp(email = email, password = password)) {
-                    val intent = Intent(application, LoginActivity::class.java)
-                    intent.apply{
+                    val intent = Intent(application, SignInAcitivity::class.java)
+                    intent.apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        putExtra("email",email)
-                        putExtra("password",password)
+                        putExtra("email", email)
+                        putExtra("password", password)
                     }
                     application.startActivity(intent)
                 } else {
