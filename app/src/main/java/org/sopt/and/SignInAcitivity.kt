@@ -1,7 +1,8 @@
 package org.sopt.and
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -46,7 +47,7 @@ class SignInAcitivity : ComponentActivity() {
                 val email = intent.getStringExtra("email")
                 val password = intent.getStringExtra("password")
                 if (email != null && password != null) {
-                    Login(email, password)
+                    Login(applicationContext, email, password)
                 }
             }
         }
@@ -81,7 +82,7 @@ fun LoginHeader() {
 }
 
 @Composable
-fun LoginForm(email: String, password: String) {
+fun LoginForm(context: Context, email: String, password: String) {
     var emailLogin by remember { mutableStateOf("") }
     var passwordLogin by remember { mutableStateOf("") }
     var isPasswowrdVisible by remember { mutableStateOf(false) }
@@ -144,6 +145,12 @@ fun LoginForm(email: String, password: String) {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar("로그인 성공!")
                         }
+                        val intent = Intent (context, MyActivity::class.java)
+                        intent.apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            putExtra("email",emailLogin)
+                        }
+                        context.startActivity(intent)
                     } else {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar("로그인 실패!")
@@ -183,14 +190,14 @@ fun validateSignIn(
 }
 
 @Composable
-fun Login(email: String, password: String) {
+fun Login(context: Context, email: String, password: String) {
     Column(
         modifier = Modifier
             .background(color = Color.Black)
             .fillMaxSize()
     ) {
         LoginHeader()
-        LoginForm(email, password)
+        LoginForm(context, email, password)
     }
 }
 
