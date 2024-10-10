@@ -51,7 +51,7 @@ class SignUpActivity : ComponentActivity() {
 }
 
 @Composable
-fun SignUpHeader() {
+fun signUpHeader() {
     Box(
         modifier = Modifier
             .background(Color.Black)
@@ -79,7 +79,7 @@ fun SignUpHeader() {
 
 
 @Composable
-fun SignUpForm(application: Application) {
+fun signUpForm(application: Application) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -232,7 +232,7 @@ fun SignUp(application: Application) {
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        SignUpHeader()
-        SignUpForm(application)
+        signUpHeader()
+        signUpForm(application)
     }
 }

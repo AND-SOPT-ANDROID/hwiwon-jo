@@ -55,7 +55,7 @@ class SignInAcitivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginHeader() {
+fun loginHeader() {
     Box(
         modifier = Modifier
             .padding(30.dp)
@@ -82,7 +82,7 @@ fun LoginHeader() {
 }
 
 @Composable
-fun LoginForm(context: Context, email: String, password: String) {
+fun loginForm(context: Context, email: String, password: String) {
     var emailLogin by remember { mutableStateOf("") }
     var passwordLogin by remember { mutableStateOf("") }
     var isPasswowrdVisible by remember { mutableStateOf(false) }
@@ -196,8 +196,8 @@ fun Login(context: Context, email: String, password: String) {
             .background(color = Color.Black)
             .fillMaxSize()
     ) {
-        LoginHeader()
-        LoginForm(context, email, password)
+        loginHeader()
+        loginForm(context, email, password)
     }
 }
 

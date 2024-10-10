@@ -44,7 +44,7 @@ class MyActivity : ComponentActivity() {
 }
 
 @Composable
-fun HeaderProfile(email: String) {
+fun headerProfile(email: String) {
     Box(
         modifier = Modifier
             .background(color = Color.DarkGray)
@@ -69,14 +69,15 @@ fun HeaderProfile(email: String) {
         )
         Text(
             text = "🔔",
-            fontSize = 30.sp,
+            fontSize = 20.sp,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(end = 55.dp)
+                .padding(end = 45.dp)
         )
+
         Text(
             text = "⚙️",
-            fontSize = 30.sp,
+            fontSize = 20.sp,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
         )
@@ -186,9 +187,8 @@ fun myView(email:String){
         modifier = Modifier
             .fillMaxSize()
     ){
-        HeaderProfile(email)
+        headerProfile(email)
         historyProfile()
     }
-
 }
 
