@@ -1,10 +1,5 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,36 +30,28 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import org.sopt.and.presentation.utils.Constants
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.presentation.viewmodel.MyviewViewModel
+import org.sopt.and.presentation.viewmodel.SignInViewModel
 
-class SignInAcitivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                val email = intent.getStringExtra(Constants.KEY_EMAIL)
-                val password = intent.getStringExtra(Constants.KEY_PASSWORD)
-                if (email != null && password != null) {
-                    LoginScreen(email, password)
-                }
-            }
-        }
-    }
-}
-
-fun validateSignIn(
-    email: String,
-    password: String,
-    emailLogin: String,
-    passwordLogin: String
-): Boolean = email.equals(emailLogin) && password.equals(passwordLogin)
 
 @Composable
-fun LoginScreen(email: String, password: String) {
+fun SignInScreen(
+    navController: NavHostController,
+    signInViewModel: SignInViewModel = viewModel(),
+    myviewViewModel: MyviewViewModel = viewModel()
+) {
     val context = LocalContext.current
+
+    var emailLogin by remember { mutableStateOf("") }
+    var passwordLogin by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
 
     Column(
         modifier = Modifier
@@ -94,13 +81,6 @@ fun LoginScreen(email: String, password: String) {
                 fontSize = 20.sp
             )
         }
-
-        var emailLogin by remember { mutableStateOf("") }
-        var passwordLogin by remember { mutableStateOf("") }
-        var isPasswordVisible by remember { mutableStateOf(false) }
-
-        val snackbarHostState = remember { SnackbarHostState() }
-        val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -148,22 +128,19 @@ fun LoginScreen(email: String, password: String) {
                         }
                     }
                 )
-
-
                 Button(
                     onClick = {
-                        if (validateSignIn(email, password, emailLogin, passwordLogin)) {
+                        if (signInViewModel.validateSignIn(emailLogin, passwordLogin)) {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 성공!")
                             }
-
-                            context.startActivity(
+                            /*context.startActivity(
                                 Intent(context, MyActivity::class.java).apply {
-                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     putExtra(Constants.KEY_EMAIL, emailLogin)
                                 }
-                            )
-
+                            )*/
                         } else {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 실패!")

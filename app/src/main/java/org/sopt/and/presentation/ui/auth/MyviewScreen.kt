@@ -1,14 +1,9 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,30 +17,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.R
-import org.sopt.and.presentation.utils.Constants
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.presentation.viewmodel.MyviewViewModel
 
-class MyActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                val email = intent.getStringExtra(Constants.KEY_EMAIL)
-                if (email != null) {
-                    MyViewScreen(email)
-                }
-            }
-        }
-    }
-}
 
 @Composable
-fun MyViewScreen(email: String) {
+fun MyviewScreen(myviewViewModel: MyviewViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +45,7 @@ fun MyViewScreen(email: String) {
                     .align(Alignment.CenterStart)
             )
             Text(
-                text = email,
+                text = myviewViewModel.email,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 85.dp),

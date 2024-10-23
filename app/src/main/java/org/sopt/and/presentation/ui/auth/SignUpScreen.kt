@@ -1,10 +1,5 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,42 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.and.presentation.utils.Constants
-import org.sopt.and.presentation.utils.RegexConstants
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.presentation.utils.showToast
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
-class SignUpActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                SignUpScreen()
-            }
-        }
-    }
-}
-
-fun validateSignUp(email: String, password: String): Boolean {
-    if (RegexConstants.EMAIL_REGEX.matches(email)) {
-        return true
-    }
-    if (password.length > Constants.MAX_PASSWORD_LENGTH || password.length < Constants.MIN_PASSWORD_LENGTH) {
-        return false
-    }
-    val hasLowerCase = RegexConstants.LOWER_CASE_REGEX.containsMatchIn(password)
-    val hasUpperCase = RegexConstants.UPPER_CASE_REGEX.containsMatchIn(password)
-    val hasDigitCase = RegexConstants.DIGIT_REGEX.containsMatchIn(password)
-    val hasSpecialChar = RegexConstants.SPECIAL_REGEX.containsMatchIn(password)
-
-    val criteriaCnt = listOf(hasLowerCase, hasUpperCase, hasDigitCase, hasSpecialChar).count { it }
-
-    return criteriaCnt >= Constants.PASSWORD_CRITERIA_COUNT
-}
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
 
     Column(
         modifier = Modifier
@@ -191,14 +157,15 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
-                    if (validateSignUp(email = email, password = password)) {
-                        context.startActivity(
+                    if (viewModel.validateSignUp(viewModel.email, viewModel.password)) {
+                        /*context.startActivity(
                             Intent(context, SignInAcitivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                 putExtra(Constants.KEY_EMAIL, email)
                                 putExtra(Constants.KEY_PASSWORD, password)
                             }
-                        )
+                        )*/
                     } else {
                         showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }
