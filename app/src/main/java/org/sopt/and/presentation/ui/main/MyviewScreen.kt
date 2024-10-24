@@ -1,4 +1,4 @@
-package org.sopt.and.presentation.ui.auth
+package org.sopt.and.presentation.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,17 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.presentation.viewmodel.MyviewViewModel
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun MyviewScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
-
-    val myviewViewModel: MyviewViewModel = viewModel()
+fun MyviewScreen(signUpViewModel: SignUpViewModel) {
 
     Column(
         modifier = Modifier

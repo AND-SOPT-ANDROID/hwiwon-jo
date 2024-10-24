@@ -1,6 +1,5 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.sopt.and.navigation.NavRoutes
+import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.utils.showToast
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
@@ -155,10 +154,6 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
-                    Log.d(
-                        "SignUp",
-                        "Email: ${signUpViewModel.email}, Password: ${signUpViewModel.password}"
-                    )
                     if (signUpViewModel.validateSignUp(
                             signUpViewModel.email,
                             signUpViewModel.password
@@ -168,7 +163,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                             signUpViewModel.email,
                             signUpViewModel.password
                         )
-                        navController.navigate(NavRoutes.SignIn.route)
+                        navController.navigate(AuthNavItem.SignIn.route)
                     } else {
                         showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }

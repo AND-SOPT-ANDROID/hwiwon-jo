@@ -1,6 +1,5 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,8 +30,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
@@ -43,8 +44,6 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
 
     val factory = SignInViewModelFactory(signUpViewModel)
     val signInViewModel: SignInViewModel = viewModel(factory = factory)
-
-    Log.d("SignInScreen", "email: ${signUpViewModel.email}. pw:${signUpViewModel.password}")
 
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -141,7 +140,12 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 성공!")
                             }
-                            navController.navigate("myView")
+                            navController.navigate(AuthNavItem.Main.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                            }
                         } else {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 실패!")

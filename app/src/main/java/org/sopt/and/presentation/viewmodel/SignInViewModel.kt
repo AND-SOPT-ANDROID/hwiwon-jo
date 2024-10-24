@@ -16,7 +16,6 @@ class SignInViewModel(
 
 
     fun validateSignIn(email: String, password: String): Boolean {
-        Log.e("SignInViewModel", signUpViewModel.email)
         return email == signUpViewModel.email && password == signUpViewModel.password
     }
 
