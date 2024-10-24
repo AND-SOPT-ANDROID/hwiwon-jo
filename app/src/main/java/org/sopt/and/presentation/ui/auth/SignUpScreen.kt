@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.utils.showToast
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
@@ -87,20 +87,14 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 color = Color.White,
             )
             Spacer(modifier = Modifier.height(30.dp))
-            TextField(
+            CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
                 value = signUpViewModel.email,
                 onValueChange = { signUpViewModel.email = it },
-                label = {
-                    Text(text = "wavve@example.com", color = Color.DarkGray)
-                },
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Gray,
-                    unfocusedContainerColor = Color.Gray
-                )
+                placeholder = "wavve@example.com",
+                validateState = TextFieldValidateResult.Basic
             )
             Text(
                 text = "⚠️ 로그인, 비밀번호 찾기, 알림에 사용되니 정확한 이메일을 입력해 주세요.",
@@ -110,40 +104,30 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 fontSize = 10.sp
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Box {
-                TextField(
-                    value = signUpViewModel.password,
-                    onValueChange = { signUpViewModel.password = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp, top = 20.dp, end = 15.dp),
-                    label = {
-                        Text(text = "Wavve 비밀번호 설정", color = Color.DarkGray)
-                    },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    ),
-                    placeholder = { Text("ex) abcdEFG123") },
-                    visualTransformation = if (signUpViewModel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-                )
-                TextButton(
-                    onClick = {
-                        signUpViewModel.isPasswordVisible = !signUpViewModel.isPasswordVisible
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(top = 20.dp, end = 8.dp)
-                        .background(Color.White.copy(alpha = 0f))
-                ) {
-                    Text(
-                        text = "show",
-                        color = Color.White,
-                        fontWeight = FontWeight.Normal
-                    )
+            CustomTextField(
+                value = signUpViewModel.password,
+                onValueChange = { signUpViewModel.password = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, top = 20.dp, end = 15.dp),
+                placeholder = "ex) abcdEFG123",
+                validateState = TextFieldValidateResult.Basic,
+                visualTransformation = if (signUpViewModel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    TextButton(
+                        onClick = {
+                            signUpViewModel.isPasswordVisible = !signUpViewModel.isPasswordVisible
+                        },
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(
+                            text = if (signUpViewModel.isPasswordVisible) "Hide" else "Show",
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
-            }
+            )
             Text(
                 modifier = Modifier
                     .padding(15.dp),

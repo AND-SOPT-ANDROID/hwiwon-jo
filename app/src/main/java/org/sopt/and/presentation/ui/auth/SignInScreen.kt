@@ -3,8 +3,10 @@ package org.sopt.and.presentation.ui.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -13,8 +15,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +34,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
@@ -90,28 +92,19 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     .padding(15.dp, 30.dp, 15.dp, 30.dp)
                     .fillMaxSize()
             ) {
-                TextField(
+
+                CustomTextField(
                     value = signInViewModel.emailLogin,
                     onValueChange = { signInViewModel.emailLogin = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("이메일 주소 또는 아이디") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    )
+                    placeholder = "이메일 주소 또는 아이디",
+                    validateState = TextFieldValidateResult.Basic
                 )
-
-                TextField(
+                Spacer(modifier = Modifier.height(20.dp))
+                CustomTextField(
                     value = signInViewModel.passwordLogin,
                     onValueChange = { signInViewModel.passwordLogin = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    label = { Text("비밀번호") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    ),
+                    placeholder = "비밀번호",
+                    validateState = TextFieldValidateResult.Basic, // 필요에 따라 유효성 상태를 설정
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         TextButton(
@@ -126,6 +119,9 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                         }
                     }
                 )
+                signInViewModel.validate()
+
+
                 Button(
                     onClick = {
                         signInViewModel.setEmailAndPassword(
