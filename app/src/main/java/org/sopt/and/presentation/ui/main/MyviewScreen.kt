@@ -1,6 +1,5 @@
 package org.sopt.and.presentation.ui.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,18 +7,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.and.R
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
@@ -36,12 +34,11 @@ fun MyviewScreen(signUpViewModel: SignUpViewModel) {
                 .fillMaxWidth()
                 .padding(15.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
                 contentDescription = "프로필 이미지",
                 modifier = Modifier
-                    .size(70.dp)
-                    .clip(CircleShape)
+                    .size(60.dp)
                     .align(Alignment.CenterStart)
             )
             Text(
