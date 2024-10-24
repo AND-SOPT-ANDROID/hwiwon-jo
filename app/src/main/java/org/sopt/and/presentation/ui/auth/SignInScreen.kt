@@ -104,7 +104,7 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     value = signInViewModel.passwordLogin,
                     onValueChange = { signInViewModel.passwordLogin = it },
                     placeholder = "비밀번호",
-                    validateState = TextFieldValidateResult.Basic, // 필요에 따라 유효성 상태를 설정
+                    validateState = TextFieldValidateResult.Basic,
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         TextButton(
