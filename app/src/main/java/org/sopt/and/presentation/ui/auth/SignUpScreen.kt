@@ -1,10 +1,5 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,13 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,42 +24,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.and.presentation.utils.Constants
-import org.sopt.and.presentation.utils.RegexConstants
+import androidx.navigation.NavHostController
+import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.utils.showToast
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
-class SignUpActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                SignUpScreen()
-            }
-        }
-    }
-}
-
-fun validateSignUp(email: String, password: String): Boolean {
-    if (RegexConstants.EMAIL_REGEX.matches(email)) {
-        return true
-    }
-    if (password.length > Constants.MAX_PASSWORD_LENGTH || password.length < Constants.MIN_PASSWORD_LENGTH) {
-        return false
-    }
-    val hasLowerCase = RegexConstants.LOWER_CASE_REGEX.containsMatchIn(password)
-    val hasUpperCase = RegexConstants.UPPER_CASE_REGEX.containsMatchIn(password)
-    val hasDigitCase = RegexConstants.DIGIT_REGEX.containsMatchIn(password)
-    val hasSpecialChar = RegexConstants.SPECIAL_REGEX.containsMatchIn(password)
-
-    val criteriaCnt = listOf(hasLowerCase, hasUpperCase, hasDigitCase, hasSpecialChar).count { it }
-
-    return criteriaCnt >= Constants.PASSWORD_CRITERIA_COUNT
-}
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -100,9 +63,7 @@ fun SignUpScreen() {
                 color = Color.White
             )
         }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var isPasswordVisible by remember { mutableStateOf(false) }
+
         val context = LocalContext.current
         Column(
             modifier = Modifier
@@ -126,20 +87,14 @@ fun SignUpScreen() {
                 color = Color.White,
             )
             Spacer(modifier = Modifier.height(30.dp))
-            TextField(
+            CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
-                value = email,
-                onValueChange = { email = it },
-                label = {
-                    Text(text = "wavve@example.com", color = Color.DarkGray)
-                },
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Gray,
-                    unfocusedContainerColor = Color.Gray
-                )
+                value = signUpViewModel.email,
+                onValueChange = { signUpViewModel.email = it },
+                placeholder = "wavve@example.com",
+                validateState = TextFieldValidateResult.Basic
             )
             Text(
                 text = "⚠️ 로그인, 비밀번호 찾기, 알림에 사용되니 정확한 이메일을 입력해 주세요.",
@@ -149,38 +104,30 @@ fun SignUpScreen() {
                 fontSize = 10.sp
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Box {
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp, top = 20.dp, end = 15.dp),
-                    label = {
-                        Text(text = "Wavve 비밀번호 설정", color = Color.DarkGray)
-                    },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    ),
-                    placeholder = { Text("ex) abcdEFG123") },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-                )
-                TextButton(
-                    onClick = { isPasswordVisible = !isPasswordVisible },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(top = 20.dp, end = 8.dp)
-                        .background(Color.White.copy(alpha = 0f))
-                ) {
-                    Text(
-                        text = "show",
-                        color = Color.White,
-                        fontWeight = FontWeight.Normal
-                    )
+            CustomTextField(
+                value = signUpViewModel.password,
+                onValueChange = { signUpViewModel.password = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, top = 20.dp, end = 15.dp),
+                placeholder = "ex) abcdEFG123",
+                validateState = TextFieldValidateResult.Basic,
+                visualTransformation = if (signUpViewModel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    TextButton(
+                        onClick = {
+                            signUpViewModel.isPasswordVisible = !signUpViewModel.isPasswordVisible
+                        },
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(
+                            text = if (signUpViewModel.isPasswordVisible) "Hide" else "Show",
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
-            }
+            )
             Text(
                 modifier = Modifier
                     .padding(15.dp),
@@ -191,14 +138,16 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
-                    if (validateSignUp(email = email, password = password)) {
-                        context.startActivity(
-                            Intent(context, SignInAcitivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                putExtra(Constants.KEY_EMAIL, email)
-                                putExtra(Constants.KEY_PASSWORD, password)
-                            }
+                    if (signUpViewModel.validateSignUp(
+                            signUpViewModel.email,
+                            signUpViewModel.password
                         )
+                    ) {
+                        signUpViewModel.setEmailAndPassword(
+                            signUpViewModel.email,
+                            signUpViewModel.password
+                        )
+                        navController.navigate(AuthNavItem.SignIn.route)
                     } else {
                         showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }

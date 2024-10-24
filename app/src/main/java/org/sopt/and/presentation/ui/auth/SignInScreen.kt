@@ -1,15 +1,12 @@
 package org.sopt.and.presentation.ui.auth
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,8 +15,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,42 +24,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import org.sopt.and.presentation.utils.Constants
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
+import org.sopt.and.presentation.viewmodel.SignInViewModel
+import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
+import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
-class SignInAcitivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                val email = intent.getStringExtra(Constants.KEY_EMAIL)
-                val password = intent.getStringExtra(Constants.KEY_PASSWORD)
-                if (email != null && password != null) {
-                    LoginScreen(email, password)
-                }
-            }
-        }
-    }
-}
-
-fun validateSignIn(
-    email: String,
-    password: String,
-    emailLogin: String,
-    passwordLogin: String
-): Boolean = email.equals(emailLogin) && password.equals(passwordLogin)
 
 @Composable
-fun LoginScreen(email: String, password: String) {
-    val context = LocalContext.current
+fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+
+    val factory = SignInViewModelFactory(signUpViewModel)
+    val signInViewModel: SignInViewModel = viewModel(factory = factory)
+
+    var isPasswordVisible by remember { mutableStateOf(false) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
 
     Column(
         modifier = Modifier
@@ -95,13 +82,6 @@ fun LoginScreen(email: String, password: String) {
             )
         }
 
-        var emailLogin by remember { mutableStateOf("") }
-        var passwordLogin by remember { mutableStateOf("") }
-        var isPasswordVisible by remember { mutableStateOf(false) }
-
-        val snackbarHostState = remember { SnackbarHostState() }
-        val coroutineScope = rememberCoroutineScope()
-
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
@@ -112,28 +92,19 @@ fun LoginScreen(email: String, password: String) {
                     .padding(15.dp, 30.dp, 15.dp, 30.dp)
                     .fillMaxSize()
             ) {
-                TextField(
-                    value = emailLogin,
-                    onValueChange = { emailLogin = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("이메일 주소 또는 아이디") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    )
-                )
 
-                TextField(
-                    value = passwordLogin,
-                    onValueChange = { passwordLogin = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    label = { Text("비밀번호") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Gray,
-                        unfocusedContainerColor = Color.Gray
-                    ),
+                CustomTextField(
+                    value = signInViewModel.emailLogin,
+                    onValueChange = { signInViewModel.emailLogin = it },
+                    placeholder = "이메일 주소 또는 아이디",
+                    validateState = TextFieldValidateResult.Basic
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                CustomTextField(
+                    value = signInViewModel.passwordLogin,
+                    onValueChange = { signInViewModel.passwordLogin = it },
+                    placeholder = "비밀번호",
+                    validateState = TextFieldValidateResult.Basic,
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         TextButton(
@@ -148,22 +119,29 @@ fun LoginScreen(email: String, password: String) {
                         }
                     }
                 )
+                signInViewModel.validate()
 
 
                 Button(
                     onClick = {
-                        if (validateSignIn(email, password, emailLogin, passwordLogin)) {
+                        signInViewModel.setEmailAndPassword(
+                            signInViewModel.emailLogin,
+                            signInViewModel.passwordLogin
+                        )
+                        if (signInViewModel.validateSignIn(
+                                signInViewModel.emailLogin,
+                                signInViewModel.passwordLogin
+                            )
+                        ) {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 성공!")
                             }
-
-                            context.startActivity(
-                                Intent(context, MyActivity::class.java).apply {
-                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    putExtra(Constants.KEY_EMAIL, emailLogin)
+                            navController.navigate(AuthNavItem.Main.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                            )
-
+                                launchSingleTop = true
+                            }
                         } else {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 실패!")
