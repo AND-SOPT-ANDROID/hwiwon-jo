@@ -7,4 +7,6 @@
     <string name="home_content_desc">홈</string>
     <string name="search_content_desc">검색</string>
     <string name="my_content_desc">MY</string>
+    <string name="homeview_wave_editor_recommendation">믿고 보는 웨이브 에디터 추천작</string>
+    <string name="homeview_today_top_20">오늘의 TOP 20</string>
 </resources>

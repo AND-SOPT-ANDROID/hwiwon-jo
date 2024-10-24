@@ -46,7 +46,6 @@ fun MyApp(signUpViewModel: SignUpViewModel) {
             MainScreen(signUpViewModel = signUpViewModel)
         }
 
-
     }
 
 }
