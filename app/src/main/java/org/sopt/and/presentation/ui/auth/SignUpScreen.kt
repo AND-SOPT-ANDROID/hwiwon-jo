@@ -1,5 +1,6 @@
 package org.sopt.and.presentation.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +14,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,13 +27,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import org.sopt.and.navigation.NavRoutes
 import org.sopt.and.presentation.utils.showToast
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
+fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -66,9 +64,7 @@ fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
                 color = Color.White
             )
         }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var isPasswordVisible by remember { mutableStateOf(false) }
+
         val context = LocalContext.current
         Column(
             modifier = Modifier
@@ -96,8 +92,8 @@ fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
-                value = email,
-                onValueChange = { email = it },
+                value = signUpViewModel.email,
+                onValueChange = { signUpViewModel.email = it },
                 label = {
                     Text(text = "wavve@example.com", color = Color.DarkGray)
                 },
@@ -117,8 +113,8 @@ fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
             Spacer(modifier = Modifier.height(10.dp))
             Box {
                 TextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = signUpViewModel.password,
+                    onValueChange = { signUpViewModel.password = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 15.dp, top = 20.dp, end = 15.dp),
@@ -131,10 +127,12 @@ fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
                         unfocusedContainerColor = Color.Gray
                     ),
                     placeholder = { Text("ex) abcdEFG123") },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                    visualTransformation = if (signUpViewModel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
                 TextButton(
-                    onClick = { isPasswordVisible = !isPasswordVisible },
+                    onClick = {
+                        signUpViewModel.isPasswordVisible = !signUpViewModel.isPasswordVisible
+                    },
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .padding(top = 20.dp, end = 8.dp)
@@ -157,15 +155,20 @@ fun SignUpScreen(viewModel: SignUpViewModel = viewModel()) {
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
-                    if (viewModel.validateSignUp(viewModel.email, viewModel.password)) {
-                        /*context.startActivity(
-                            Intent(context, SignInAcitivity::class.java).apply {
-                                flags =
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                putExtra(Constants.KEY_EMAIL, email)
-                                putExtra(Constants.KEY_PASSWORD, password)
-                            }
-                        )*/
+                    Log.d(
+                        "SignUp",
+                        "Email: ${signUpViewModel.email}, Password: ${signUpViewModel.password}"
+                    )
+                    if (signUpViewModel.validateSignUp(
+                            signUpViewModel.email,
+                            signUpViewModel.password
+                        )
+                    ) {
+                        signUpViewModel.setEmailAndPassword(
+                            signUpViewModel.email,
+                            signUpViewModel.password
+                        )
+                        navController.navigate(NavRoutes.SignIn.route)
                     } else {
                         showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }

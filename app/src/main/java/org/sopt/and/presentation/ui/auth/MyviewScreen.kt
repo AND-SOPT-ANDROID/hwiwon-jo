@@ -20,12 +20,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.presentation.viewmodel.MyviewViewModel
+import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun MyviewScreen(myviewViewModel: MyviewViewModel = viewModel()) {
+fun MyviewScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+
+    val myviewViewModel: MyviewViewModel = viewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,11 +50,11 @@ fun MyviewScreen(myviewViewModel: MyviewViewModel = viewModel()) {
                     .align(Alignment.CenterStart)
             )
             Text(
-                text = myviewViewModel.email,
+                text = signUpViewModel.email,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 85.dp),
-                fontSize = 15.sp,
+                fontSize = 10.sp,
                 color = Color.White
             )
 

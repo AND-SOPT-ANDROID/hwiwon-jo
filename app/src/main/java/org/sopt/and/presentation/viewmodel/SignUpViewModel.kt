@@ -11,11 +11,12 @@ class SignUpViewModel : ViewModel() {
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var isPasswordVisible by mutableStateOf(false)
 
 
     fun validateSignUp(email: String, password: String): Boolean {
-        if (RegexConstants.EMAIL_REGEX.matches(email)) {
-            return true
+        if (!RegexConstants.EMAIL_REGEX.matches(email)) {
+            return false
         }
         if (password.length > Constants.MAX_PASSWORD_LENGTH || password.length < Constants.MIN_PASSWORD_LENGTH) {
             return false

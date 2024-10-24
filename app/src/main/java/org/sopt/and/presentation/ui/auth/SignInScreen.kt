@@ -1,5 +1,6 @@
 package org.sopt.and.presentation.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -33,20 +33,19 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import org.sopt.and.presentation.viewmodel.MyviewViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModel
+import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
+import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignInScreen(
-    navController: NavHostController,
-    signInViewModel: SignInViewModel = viewModel(),
-    myviewViewModel: MyviewViewModel = viewModel()
-) {
-    val context = LocalContext.current
+fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
 
-    var emailLogin by remember { mutableStateOf("") }
-    var passwordLogin by remember { mutableStateOf("") }
+    val factory = SignInViewModelFactory(signUpViewModel)
+    val signInViewModel: SignInViewModel = viewModel(factory = factory)
+
+    Log.d("SignInScreen", "email: ${signUpViewModel.email}. pw:${signUpViewModel.password}")
+
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -93,8 +92,8 @@ fun SignInScreen(
                     .fillMaxSize()
             ) {
                 TextField(
-                    value = emailLogin,
-                    onValueChange = { emailLogin = it },
+                    value = signInViewModel.emailLogin,
+                    onValueChange = { signInViewModel.emailLogin = it },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("이메일 주소 또는 아이디") },
                     colors = TextFieldDefaults.colors(
@@ -104,8 +103,8 @@ fun SignInScreen(
                 )
 
                 TextField(
-                    value = passwordLogin,
-                    onValueChange = { passwordLogin = it },
+                    value = signInViewModel.passwordLogin,
+                    onValueChange = { signInViewModel.passwordLogin = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
@@ -130,17 +129,19 @@ fun SignInScreen(
                 )
                 Button(
                     onClick = {
-                        if (signInViewModel.validateSignIn(emailLogin, passwordLogin)) {
+                        signInViewModel.setEmailAndPassword(
+                            signInViewModel.emailLogin,
+                            signInViewModel.passwordLogin
+                        )
+                        if (signInViewModel.validateSignIn(
+                                signInViewModel.emailLogin,
+                                signInViewModel.passwordLogin
+                            )
+                        ) {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 성공!")
                             }
-                            /*context.startActivity(
-                                Intent(context, MyActivity::class.java).apply {
-                                    flags =
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    putExtra(Constants.KEY_EMAIL, emailLogin)
-                                }
-                            )*/
+                            navController.navigate("myView")
                         } else {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 실패!")
