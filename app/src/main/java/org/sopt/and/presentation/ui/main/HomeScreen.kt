@@ -89,17 +89,9 @@ fun HomeScreen() {
     }
 }
 
-val moviePosters = listOf(
-    R.drawable.film_poster_dummy,
-    R.drawable.film_poster_dummy2,
-    R.drawable.film_poster_dummy,
-    R.drawable.film_poster_dummy2,
-    R.drawable.film_poster_dummy,
-    R.drawable.film_poster_dummy2,
-    R.drawable.film_poster_dummy,
-    R.drawable.film_poster_dummy2,
-    R.drawable.film_poster_dummy
-)
+val moviePosters = List(9) {
+    if (it % 2 == 0) R.drawable.film_poster_dummy else R.drawable.film_poster_dummy2
+}
 
 @Composable
 fun CategoryBanner(category: String) {
