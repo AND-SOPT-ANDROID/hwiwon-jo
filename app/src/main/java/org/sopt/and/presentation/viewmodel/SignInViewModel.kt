@@ -10,24 +10,37 @@ class SignInViewModel(
     private val signUpViewModel: SignUpViewModel
 ) : ViewModel() {
 
-    var emailLogin by mutableStateOf("")
-    var passwordLogin by mutableStateOf("")
+    private var _emailLogin by mutableStateOf("")
+    val emailLogin: String
+        get() = _emailLogin
+    
+    private var _passwordLogin by mutableStateOf("")
+    val passwordLogin: String
+        get() = _passwordLogin
 
     var emailError by mutableStateOf("")
     var passwordError by mutableStateOf("")
 
-    fun validate() {
+    fun updateEmailLogin(newEmail: String) {
+        _emailLogin = newEmail
+        validateEmail()
+    }
+
+    fun updatePasswordLogin(newPassword: String) {
+        _passwordLogin = newPassword
+        validatePassword()
+    }
+
+    fun validateEmail() {
         emailError = if (emailLogin.isEmpty()) "이메일을 입력하세요." else ""
+    }
+
+    fun validatePassword() {
         passwordError = if (passwordLogin.isEmpty()) "비밀번호를 입력하세요." else ""
     }
 
     fun validateSignIn(email: String, password: String): Boolean {
         return email == signUpViewModel.email && password == signUpViewModel.password
-    }
-
-    fun setEmailAndPassword(email: String, password: String) {
-        this.emailLogin = email
-        this.passwordLogin = password
     }
 }
 

@@ -95,14 +95,14 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
 
                 CustomTextField(
                     value = signInViewModel.emailLogin,
-                    onValueChange = { signInViewModel.emailLogin = it },
+                    onValueChange = { signInViewModel.updateEmailLogin(it) },
                     placeholder = "이메일 주소 또는 아이디",
                     validateState = TextFieldValidateResult.Basic
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 CustomTextField(
                     value = signInViewModel.passwordLogin,
-                    onValueChange = { signInViewModel.passwordLogin = it },
+                    onValueChange = { signInViewModel.updatePasswordLogin(it) },
                     placeholder = "비밀번호",
                     validateState = TextFieldValidateResult.Basic,
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -119,15 +119,10 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                         }
                     }
                 )
-                signInViewModel.validate()
 
 
                 Button(
                     onClick = {
-                        signInViewModel.setEmailAndPassword(
-                            signInViewModel.emailLogin,
-                            signInViewModel.passwordLogin
-                        )
                         if (signInViewModel.validateSignIn(
                                 signInViewModel.emailLogin,
                                 signInViewModel.passwordLogin
