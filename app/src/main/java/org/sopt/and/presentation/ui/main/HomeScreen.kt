@@ -5,15 +5,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,22 +29,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import org.sopt.and.R
 
 @Composable
 fun HomeScreen() {
-
-    val moviePosters = listOf(
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy,
-        R.drawable.film_poster_dummy
-    )
 
     LazyColumn(
         modifier = Modifier
@@ -62,6 +55,10 @@ fun HomeScreen() {
                     CategoryBanner(category = categories[index])
                 }
             }
+        }
+
+        item {
+            TopPager(list = moviePosters)
         }
 
         item {
@@ -91,6 +88,18 @@ fun HomeScreen() {
         }
     }
 }
+
+val moviePosters = listOf(
+    R.drawable.film_poster_dummy,
+    R.drawable.film_poster_dummy2,
+    R.drawable.film_poster_dummy,
+    R.drawable.film_poster_dummy2,
+    R.drawable.film_poster_dummy,
+    R.drawable.film_poster_dummy2,
+    R.drawable.film_poster_dummy,
+    R.drawable.film_poster_dummy2,
+    R.drawable.film_poster_dummy
+)
 
 @Composable
 fun CategoryBanner(category: String) {
@@ -162,5 +171,55 @@ fun TopPosterItem(posterItem: Int, rank: Int) {
             fontWeight = FontWeight.W800,
             fontStyle = FontStyle.Italic
         )
+    }
+}
+
+const val AUTO_PAGE_CHANGE_DELAY = 3000L
+
+@Composable
+fun TopPager(
+    list: List<Int>
+) {
+    val pagerState =
+        rememberPagerState(initialPage = Int.MAX_VALUE / 2, pageCount = { Int.MAX_VALUE })
+
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(AUTO_PAGE_CHANGE_DELAY)
+            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+        }
+    }
+    Box(
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth()
+            .aspectRatio(0.8f)
+    ) {
+        HorizontalPager(
+            state = pagerState
+        ) { index ->
+            val itemIndex = index % list.size
+            Image(
+                painter = painterResource(id = list[itemIndex]),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(5.dp))
+            )
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(10.dp)
+                .background(Color.Black.copy(alpha = 0.5f), shape = RoundedCornerShape(8.dp))
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Text(
+                text = "${(pagerState.currentPage % list.size + 1)}|${list.size}",
+                color = Color.White,
+                fontSize = 12.sp
+            )
+        }
     }
 }
