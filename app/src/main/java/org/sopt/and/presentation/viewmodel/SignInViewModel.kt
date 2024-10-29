@@ -13,7 +13,7 @@ class SignInViewModel(
     private var _emailLogin by mutableStateOf("")
     val emailLogin: String
         get() = _emailLogin
-    
+
     private var _passwordLogin by mutableStateOf("")
     val passwordLogin: String
         get() = _passwordLogin
@@ -39,9 +39,9 @@ class SignInViewModel(
         passwordError = if (passwordLogin.isEmpty()) "비밀번호를 입력하세요." else ""
     }
 
-    fun validateSignIn(email: String, password: String): Boolean {
-        return email == signUpViewModel.email && password == signUpViewModel.password
-    }
+    fun validateSignIn(): Boolean =
+        emailLogin == signUpViewModel.email && passwordLogin == signUpViewModel.password
+
 }
 
 class SignInViewModelFactory(private val signUpViewmodel: SignUpViewModel) :

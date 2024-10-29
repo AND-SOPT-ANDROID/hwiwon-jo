@@ -69,9 +69,7 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 text = "<",
                 color = Color.White,
                 fontSize = 20.sp
-
             )
-
             Text(
                 modifier = Modifier
                     .align(Alignment.Center),
@@ -123,10 +121,7 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
 
                 Button(
                     onClick = {
-                        if (signInViewModel.validateSignIn(
-                                signInViewModel.emailLogin,
-                                signInViewModel.passwordLogin
-                            )
+                        if (signInViewModel.validateSignIn()
                         ) {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("로그인 성공!")
