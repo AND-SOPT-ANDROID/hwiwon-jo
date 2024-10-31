@@ -132,7 +132,7 @@ fun TopPosterRow(moviePosters: List<Int>) {
         contentPadding = PaddingValues(15.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(moviePosters.size) { index ->
+        items(moviePosters.size, key = { index -> moviePosters[index] }) { index ->
             TopPosterItem(posterItem = moviePosters[index], rank = index + 1)
         }
     }
