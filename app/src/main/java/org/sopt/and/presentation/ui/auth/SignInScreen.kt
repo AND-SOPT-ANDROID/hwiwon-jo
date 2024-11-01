@@ -34,8 +34,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.component.CustomTextField
-import org.sopt.and.presentation.ui.component.TextFieldValidateResult
+import org.sopt.and.presentation.ui.auth.component.AuthButton
+import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
@@ -118,8 +119,8 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     }
                 )
 
-
-                Button(
+                AuthButton(
+                    text = "로그인",
                     onClick = {
                         if (signInViewModel.validateSignIn()
                         ) {
@@ -137,20 +138,9 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                                 snackbarHostState.showSnackbar("로그인 실패!")
                             }
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue
-                    )
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp, bottom = 10.dp),
-                        text = "로그인"
-                    )
-                }
+                    }
+                )
+                
             }
         }
 

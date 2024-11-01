@@ -1,4 +1,4 @@
-package org.sopt.and.presentation.ui.component
+package org.sopt.and.presentation.ui.auth.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
