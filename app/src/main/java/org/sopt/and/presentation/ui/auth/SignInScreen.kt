@@ -34,8 +34,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.auth.component.CustomTextField
-import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
+import org.sopt.and.presentation.ui.component.CustomTextField
+import org.sopt.and.presentation.ui.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
