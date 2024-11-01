@@ -145,7 +145,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                         )
                         navController.navigate(AuthNavItem.SignIn.route)
                     } else {
-                        showToast(context, "회원가입 조건에 부합하지 않습니다.")
+                        context.showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }
                 },
                 modifier = Modifier
