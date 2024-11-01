@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.ui.auth.component.AuthButton
 import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
-import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.AuthTextField
 import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
@@ -93,14 +93,14 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     .fillMaxSize()
             ) {
 
-                CustomTextField(
+                AuthTextField(
                     value = signInViewModel.emailLogin,
                     onValueChange = { signInViewModel.updateEmailLogin(it) },
                     placeholder = "이메일 주소 또는 아이디",
                     validateState = TextFieldValidateResult.Basic
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                CustomTextField(
+                AuthTextField(
                     value = signInViewModel.passwordLogin,
                     onValueChange = { signInViewModel.updatePasswordLogin(it) },
                     placeholder = "비밀번호",
