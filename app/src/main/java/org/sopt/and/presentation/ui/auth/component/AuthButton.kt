@@ -21,7 +21,7 @@ fun AuthButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp, horizontal = 16.dp),
+            .padding(vertical = 16.dp),
         colors = buttonColors(
             backgroundColor = Color.Blue,
             contentColor = Color.White
