@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,7 +33,9 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.ui.auth.component.AuthButton
+import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
 import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
@@ -52,6 +52,7 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
 
 
     Column(
@@ -140,9 +141,13 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                         }
                     }
                 )
-                
+
+                AuthServiceDescription()
+                ServiceIconRow()
+
             }
         }
+
 
     }
 }

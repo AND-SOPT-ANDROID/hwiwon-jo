@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
 import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.utils.showToast
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
@@ -34,6 +36,7 @@ import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+
 
     Column(
         modifier = Modifier
@@ -135,6 +138,8 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 fontSize = 10.sp,
                 color = Color.Gray
             )
+            AuthServiceDescription()
+            ServiceIconRow()
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
@@ -164,6 +169,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     textAlign = TextAlign.Center
                 )
             }
+
         }
     }
 }

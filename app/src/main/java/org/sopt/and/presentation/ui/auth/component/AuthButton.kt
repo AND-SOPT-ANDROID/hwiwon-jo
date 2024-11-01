@@ -3,7 +3,6 @@ package org.sopt.and.presentation.ui.auth.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +21,7 @@ fun AuthButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 40.dp, horizontal = 20.dp),
+            .padding(vertical = 20.dp, horizontal = 16.dp),
         colors = buttonColors(
             backgroundColor = Color.Blue,
             contentColor = Color.White
@@ -37,6 +36,6 @@ fun AuthButton(
 
 @Preview
 @Composable
-fun PriviewAuthButton(){
+fun PriviewAuthButton() {
     AuthButton(text = "로그인", onClick = {})
 }
