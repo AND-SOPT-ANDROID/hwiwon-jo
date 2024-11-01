@@ -14,5 +14,8 @@
     <string name="signup_password_description">비밀번호는 8~20자 이내로 영문 대소문자, 숫자, 특수문자 중 3가지 이상 혼용하여 입력해주세요.</string>
     <string name="sign_social_description">또는 다른 서비스 계정으로 가입</string>
 
+    <string name="my_1stPurchase_description">첫 결제 시 첫 달 100원!</string>
+    <string name="my_NowTicket_description">현재 보유하신 이용권이 없습니다.</string>
+
 
 </resources>

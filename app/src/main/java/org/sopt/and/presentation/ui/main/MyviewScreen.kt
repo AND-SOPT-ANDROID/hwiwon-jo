@@ -15,9 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.sopt.and.R
+import org.sopt.and.presentation.ui.main.component.MyPurchaseInfoCol
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
@@ -66,40 +69,8 @@ fun MyviewScreen(signUpViewModel: SignUpViewModel) {
             )
 
         }
-        Column(
-            modifier = Modifier
-                .background(Color.DarkGray)
-                .padding(top = 30.dp, start = 15.dp, bottom = 30.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = "첫 결제 시 첫 달 100원!",
-                fontSize = 18.sp,
-                color = Color.LightGray
-            )
-            Text(
-                text = "구매하기 >",
-                fontSize = 18.sp,
-                color = Color.White
-            )
-        }
-        Column(
-            modifier = Modifier
-                .background(Color.DarkGray)
-                .padding(top = 30.dp, start = 15.dp, bottom = 30.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = "현재 보유하신 이용권이 없습니다.",
-                fontSize = 18.sp,
-                color = Color.LightGray
-            )
-            Text(
-                text = "구매하기 >",
-                fontSize = 18.sp,
-                color = Color.White
-            )
-        }
+        MyPurchaseInfoCol(mainText = stringResource(R.string.my_1stPurchase_description))
+        MyPurchaseInfoCol(mainText = stringResource(R.string.my_NowTicket_description))
         Box(
             modifier = Modifier
                 .background(Color.Black)
