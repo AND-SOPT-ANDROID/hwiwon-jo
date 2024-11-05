@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -60,12 +63,12 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
             )
-            Text(
-                text = "❌",
+            Icon(
+                Icons.Default.Close,
+                tint = Color.White,
+                contentDescription = "close",
                 modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                fontSize = 15.sp,
-                color = Color.White
+                    .align(Alignment.CenterEnd)
             )
         }
 
@@ -89,9 +92,10 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 modifier = Modifier.padding(start = 15.dp, top = 30.dp, end = 15.dp),
                 text = text,
                 fontSize = 28.sp,
+                lineHeight = 40.sp,
                 color = Color.White,
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             AuthTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,7 +132,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 },
                 infoDescription = stringResource(R.string.signup_password_description)
             )
-
+            Spacer(modifier = Modifier.height(40.dp))
             AuthServiceDescription()
             ServiceIconRow()
             Spacer(modifier = Modifier.weight(1f))
