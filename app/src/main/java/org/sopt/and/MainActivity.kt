@@ -1,51 +1,51 @@
 package org.sopt.and
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.ui.auth.SignInScreen
 import org.sopt.and.presentation.ui.auth.SignUpScreen
 import org.sopt.and.presentation.ui.main.MainScreen
-import org.sopt.and.presentation.viewmodel.SignUpViewModel
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ANDANDROIDTheme {
-                val signUpViewModel: SignUpViewModel = viewModel()
-                MyApp(signUpViewModel)
+                MyAppScreen()
             }
         }
     }
 }
 
+@HiltAndroidApp
+class MyApp : Application()
+
 @Composable
-fun MyApp(signUpViewModel: SignUpViewModel) {
+fun MyAppScreen() {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = AuthNavItem.SignUp.route) {
         composable(AuthNavItem.SignUp.route) {
-            SignUpScreen(signUpViewModel = signUpViewModel, navController = navController)
+            SignUpScreen(navController = navController)
         }
-
         composable(AuthNavItem.SignIn.route) {
-            SignInScreen(signUpViewModel = signUpViewModel, navController = navController)
+            SignInScreen(navController = navController)
         }
-
         composable(AuthNavItem.Main.route) {
-            MainScreen(signUpViewModel = signUpViewModel)
+            MainScreen()
         }
-
     }
-
 }

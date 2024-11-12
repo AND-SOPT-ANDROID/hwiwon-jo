@@ -40,7 +40,7 @@ class SignInViewModel(
     }
 
     fun validateSignIn(): Boolean =
-        emailLogin == signUpViewModel.email && passwordLogin == signUpViewModel.password
+        emailLogin == signUpViewModel.username && passwordLogin == signUpViewModel.password
 
 }
 

@@ -1,5 +1,6 @@
 package org.sopt.and.presentation.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.navigation.AuthNavItem
@@ -40,8 +45,13 @@ import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+fun SignUpScreen(
+    signUpViewModel: SignUpViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
 
+    val signUpResult by signUpViewModel.userRegistrationResult.observeAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -71,8 +81,6 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     .align(Alignment.CenterEnd)
             )
         }
-
-        val context = LocalContext.current
         Column(
             modifier = Modifier
                 .background(Color.Black)
@@ -100,11 +108,11 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
-                value = signUpViewModel.email,
-                onValueChange = { signUpViewModel.email = it },
+                value = signUpViewModel.username,
+                onValueChange = { signUpViewModel.username = it },
                 placeholder = "wavve@example.com",
                 validateState = TextFieldValidateResult.Basic,
-                infoDescription = stringResource(R.string.signup_email_description)
+                infoDescription = stringResource(R.string.signup_username_description)
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -132,6 +140,18 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 },
                 infoDescription = stringResource(R.string.signup_password_description)
             )
+            Spacer(modifier = Modifier.height(10.dp))
+            AuthTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, top = 30.dp, end = 15.dp),
+                value = signUpViewModel.hobby,
+                onValueChange = { signUpViewModel.hobby = it },
+                placeholder = "ex) 음악 감상",
+                validateState = TextFieldValidateResult.Basic,
+                infoDescription = stringResource(R.string.signup_hobby_description)
+            )
+
             Spacer(modifier = Modifier.height(40.dp))
             AuthServiceDescription()
             ServiceIconRow()
@@ -139,15 +159,16 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
             TextButton(
                 onClick = {
                     if (signUpViewModel.validateSignUp(
-                            signUpViewModel.email,
-                            signUpViewModel.password
+                            signUpViewModel.username,
+                            signUpViewModel.password,
+                            signUpViewModel.hobby
                         )
                     ) {
-                        signUpViewModel.setEmailAndPassword(
-                            signUpViewModel.email,
-                            signUpViewModel.password
+                        signUpViewModel.registerUser(
+                            signUpViewModel.username,
+                            signUpViewModel.password,
+                            signUpViewModel.hobby
                         )
-                        navController.navigate(AuthNavItem.SignIn.route)
                     } else {
                         context.showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }
@@ -163,6 +184,19 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     color = Color.White,
                     textAlign = TextAlign.Center
                 )
+            }
+
+            signUpResult?.let { result ->
+                if (result.isSuccess) {
+                    LaunchedEffect(Unit) {
+                        context.showToast(context, "회원가입 성공!")
+                        navController.navigate(AuthNavItem.SignIn.route)
+                    }
+                } else {
+                    val errorMessage = result.exceptionOrNull()?.message ?: "회원가입 실패"
+                    Log.e("signupscreen", errorMessage)
+                    context.showToast(context, errorMessage)
+                }
             }
 
         }

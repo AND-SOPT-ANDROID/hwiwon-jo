@@ -5,7 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
+
 
 val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
@@ -59,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -76,5 +80,12 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
+    //hilt
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.compiler.v2511)
+    implementation(libs.androidx.hilt.navigation.compose)
+}
 
+kapt {
+    correctErrorTypes = true
 }

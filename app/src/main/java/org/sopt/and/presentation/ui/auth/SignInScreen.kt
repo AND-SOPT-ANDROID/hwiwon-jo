@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -43,7 +44,10 @@ import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+fun SignInScreen(
+    signUpViewModel: SignUpViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
 
     val factory = SignInViewModelFactory(signUpViewModel)
     val signInViewModel: SignInViewModel = viewModel(factory = factory)

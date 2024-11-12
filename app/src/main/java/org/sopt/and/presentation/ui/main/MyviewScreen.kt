@@ -45,7 +45,7 @@ fun MyviewScreen(signUpViewModel: SignUpViewModel) {
                     .align(Alignment.CenterStart)
             )
             Text(
-                text = signUpViewModel.email,
+                text = signUpViewModel.username,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 85.dp),
