@@ -1,16 +1,16 @@
-package org.sopt.and.data.repository
+package org.sopt.and.data.repository.Auth
 
 import org.sopt.and.data.api.UserRegistrationService
-import org.sopt.and.data.dto.RequestUserRegistration
+import org.sopt.and.data.dto.RequestUserRegistrationData
 import org.sopt.and.data.dto.ResponseUserRegistration
 import javax.inject.Inject
 
 class UserRegistrationRepository @Inject constructor(
     private val apiService: UserRegistrationService
 ) {
-    suspend fun registerUser(userRequest: RequestUserRegistration): Result<ResponseUserRegistration> {
+    suspend fun postUserRegistration(requestData: RequestUserRegistrationData): Result<ResponseUserRegistration> {
         return try {
-            val response = apiService.registerUser(userRequest)
+            val response = apiService.postUserRegistration(requestData)
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {

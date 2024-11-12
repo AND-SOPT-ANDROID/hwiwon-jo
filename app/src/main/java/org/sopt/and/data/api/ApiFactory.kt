@@ -45,4 +45,10 @@ object ApiFactory {
         return retrofit.create(UserRegistrationService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideLoginService(retrofit: Retrofit): LoginService {
+        return retrofit.create(LoginService::class.java)
+    }
+
 }

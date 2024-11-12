@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.and.data.dto.RequestUserRegistration
+import org.sopt.and.data.dto.RequestUserRegistrationData
 import org.sopt.and.data.dto.ResponseUserRegistration
-import org.sopt.and.data.repository.UserRegistrationRepository
+import org.sopt.and.data.repository.Auth.UserRegistrationRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +24,8 @@ class SignUpViewModel @Inject constructor(
 
     fun registerUser(username: String, password: String, hobby: String) {
         viewModelScope.launch {
-            val userRequest = RequestUserRegistration(username, password, hobby)
-            val result = userRegistrationRepository.registerUser(userRequest)
+            val userRequest = RequestUserRegistrationData(username, password, hobby)
+            val result = userRegistrationRepository.postUserRegistration(userRequest)
             _userRegistrationResult.postValue(result)
         }
     }
