@@ -51,4 +51,10 @@ object ApiFactory {
         return retrofit.create(LoginService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideHobbyService(retrofit: Retrofit): HobbyService {
+        return retrofit.create(HobbyService::class.java)
+    }
+
 }

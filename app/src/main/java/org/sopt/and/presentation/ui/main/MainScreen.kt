@@ -34,7 +34,7 @@ fun MainScreen(
         bottomBar = { BottomBar(navController = navController) }
     ) {
         Box(Modifier.padding(it)) {
-            BottomNavGraph(navController = navController, signUpViewModel = signUpViewModel)
+            BottomNavGraph(navController = navController)
         }
     }
 }
