@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.sopt.and.R
+import org.sopt.and.presentation.ui.main.component.HomeContentList
 
 @Composable
 fun HomeScreen() {
@@ -62,22 +63,29 @@ fun HomeScreen() {
         }
 
         item {
-            Text(
-                text = stringResource(id = R.string.homeview_wave_editor_recommendation),
-                //text = "믿고 보는 웨이브 에디터 추천작",
-                modifier = Modifier
-                    .padding(start = 15.dp),
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W600
+            HomeContentList(
+                title = stringResource(id = R.string.homeview_wave_editor_recommendation),
+                moviePosters = moviePosters
             )
-            RecommendPosterRow(moviePosters = moviePosters)
+        }
+
+        item {
+            HomeContentList(
+                title = "실시간 인기 콘텐츠",
+                moviePosters = moviePosters
+            )
+        }
+
+        item {
+            HomeContentList(
+                title = "오직 웨이브에서",
+                moviePosters = moviePosters
+            )
         }
 
         item {
             Text(
                 text = stringResource(id = R.string.homeview_today_top_20),
-                //text = "오늘의 TOP 20",
                 modifier = Modifier
                     .padding(start = 15.dp),
                 color = Color.White,
@@ -102,29 +110,6 @@ fun CategoryBanner(category: String) {
     )
 }
 
-@Composable
-fun RecommendPosterRow(moviePosters: List<Int>) {
-    LazyRow(
-        contentPadding = PaddingValues(15.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        items(moviePosters.size) { index ->
-            RecommendPosterItem(posterItem = moviePosters[index])
-        }
-    }
-}
-
-@Composable
-fun RecommendPosterItem(posterItem: Int) {
-    Image(
-        painter = painterResource(id = posterItem),
-        contentDescription = "영화 포스터",
-        modifier = Modifier
-            .size(120.dp, 180.dp)
-            .clip(RoundedCornerShape(3.dp)),
-        contentScale = ContentScale.Crop
-    )
-}
 
 @Composable
 fun TopPosterRow(moviePosters: List<Int>) {

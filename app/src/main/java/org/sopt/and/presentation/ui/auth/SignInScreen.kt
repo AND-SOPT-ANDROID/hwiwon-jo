@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,7 +32,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.AuthButton
+import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
+import org.sopt.and.presentation.ui.auth.component.AuthTextField
+import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
 import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
@@ -51,6 +52,7 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
 
 
     Column(
@@ -91,14 +93,14 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     .fillMaxSize()
             ) {
 
-                CustomTextField(
+                AuthTextField(
                     value = signInViewModel.emailLogin,
                     onValueChange = { signInViewModel.updateEmailLogin(it) },
                     placeholder = "이메일 주소 또는 아이디",
                     validateState = TextFieldValidateResult.Basic
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                CustomTextField(
+                AuthTextField(
                     value = signInViewModel.passwordLogin,
                     onValueChange = { signInViewModel.updatePasswordLogin(it) },
                     placeholder = "비밀번호",
@@ -118,8 +120,8 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     }
                 )
 
-
-                Button(
+                AuthButton(
+                    text = "로그인",
                     onClick = {
                         if (signInViewModel.validateSignIn()
                         ) {
@@ -137,22 +139,15 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                                 snackbarHostState.showSnackbar("로그인 실패!")
                             }
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue
-                    )
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp, bottom = 10.dp),
-                        text = "로그인"
-                    )
-                }
+                    }
+                )
+
+                AuthServiceDescription()
+                ServiceIconRow()
+
             }
         }
+
 
     }
 }

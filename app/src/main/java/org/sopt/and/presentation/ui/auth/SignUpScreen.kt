@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,8 +26,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import org.sopt.and.R
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.auth.component.CustomTextField
+import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
+import org.sopt.and.presentation.ui.auth.component.AuthTextField
+import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.utils.showToast
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
@@ -34,6 +38,7 @@ import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
+
 
     Column(
         modifier = Modifier
@@ -87,24 +92,18 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 color = Color.White,
             )
             Spacer(modifier = Modifier.height(30.dp))
-            CustomTextField(
+            AuthTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
                 value = signUpViewModel.email,
                 onValueChange = { signUpViewModel.email = it },
                 placeholder = "wavve@example.com",
-                validateState = TextFieldValidateResult.Basic
-            )
-            Text(
-                text = "⚠️ 로그인, 비밀번호 찾기, 알림에 사용되니 정확한 이메일을 입력해 주세요.",
-                modifier = Modifier
-                    .padding(15.dp),
-                color = Color.Gray,
-                fontSize = 10.sp
+                validateState = TextFieldValidateResult.Basic,
+                infoDescription = stringResource(R.string.signup_email_description)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CustomTextField(
+            AuthTextField(
                 value = signUpViewModel.password,
                 onValueChange = { signUpViewModel.password = it },
                 modifier = Modifier
@@ -126,15 +125,12 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                             fontWeight = FontWeight.Normal
                         )
                     }
-                }
+                },
+                infoDescription = stringResource(R.string.signup_password_description)
             )
-            Text(
-                modifier = Modifier
-                    .padding(15.dp),
-                text = "⚠️ 비밀번호는 8~20자 이내로 영문 대소문자, 숫자, 특수문자 중 3가지 이상 혼용하여 입력해 주세요.",
-                fontSize = 10.sp,
-                color = Color.Gray
-            )
+
+            AuthServiceDescription()
+            ServiceIconRow()
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
@@ -149,7 +145,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                         )
                         navController.navigate(AuthNavItem.SignIn.route)
                     } else {
-                        showToast(context, "회원가입 조건에 부합하지 않습니다.")
+                        context.showToast(context, "회원가입 조건에 부합하지 않습니다.")
                     }
                 },
                 modifier = Modifier
@@ -164,6 +160,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                     textAlign = TextAlign.Center
                 )
             }
+
         }
     }
 }
