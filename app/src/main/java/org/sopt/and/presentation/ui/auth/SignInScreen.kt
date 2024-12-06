@@ -1,5 +1,6 @@
 package org.sopt.and.presentation.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,7 +29,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
@@ -38,22 +40,17 @@ import org.sopt.and.presentation.ui.auth.component.AuthTextField
 import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
 import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 import org.sopt.and.presentation.viewmodel.SignInViewModel
-import org.sopt.and.presentation.viewmodel.SignInViewModelFactory
-import org.sopt.and.presentation.viewmodel.SignUpViewModel
-
 
 @Composable
-fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostController) {
-
-    val factory = SignInViewModelFactory(signUpViewModel)
-    val signInViewModel: SignInViewModel = viewModel(factory = factory)
+fun SignInScreen(
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
+    val signInResult by signInViewModel.loginResult.observeAsState()
 
     var isPasswordVisible by remember { mutableStateOf(false) }
-
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-
-
 
     Column(
         modifier = Modifier
@@ -94,14 +91,14 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
             ) {
 
                 AuthTextField(
-                    value = signInViewModel.emailLogin,
-                    onValueChange = { signInViewModel.updateEmailLogin(it) },
+                    value = signInViewModel.username,
+                    onValueChange = { signInViewModel.updateUsernameLogin(it) },
                     placeholder = "이메일 주소 또는 아이디",
                     validateState = TextFieldValidateResult.Basic
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 AuthTextField(
-                    value = signInViewModel.passwordLogin,
+                    value = signInViewModel.password,
                     onValueChange = { signInViewModel.updatePasswordLogin(it) },
                     placeholder = "비밀번호",
                     validateState = TextFieldValidateResult.Basic,
@@ -123,32 +120,35 @@ fun SignInScreen(signUpViewModel: SignUpViewModel, navController: NavHostControl
                 AuthButton(
                     text = "로그인",
                     onClick = {
-                        if (signInViewModel.validateSignIn()
-                        ) {
-                            coroutineScope.launch {
-                                snackbarHostState.showSnackbar("로그인 성공!")
-                            }
-                            navController.navigate(AuthNavItem.Main.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                            }
-                        } else {
-                            coroutineScope.launch {
-                                snackbarHostState.showSnackbar("로그인 실패!")
-                            }
-                        }
+                        signInViewModel.postLogin(
+                            signInViewModel.username,
+                            signInViewModel.password
+                        )
                     }
                 )
-
+                signInResult?.let { result ->
+                    if (result.isSuccess) {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar("로그인 성공!")
+                        }
+                        navController.navigate(AuthNavItem.Main.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                        }
+                    } else {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar("로그인 실패!")
+                        }
+                        val errorMessage = result.exceptionOrNull()?.message ?: "로그인 실패!!"
+                        Log.e("signInScreen", errorMessage)
+                    }
+                }
                 AuthServiceDescription()
                 ServiceIconRow()
-
             }
         }
-
-
     }
 }
 

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -24,14 +25,16 @@ import org.sopt.and.navigation.BottomNavItem
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
 @Composable
-fun MainScreen(signUpViewModel: SignUpViewModel) {
+fun MainScreen(
+    signUpViewModel: SignUpViewModel = hiltViewModel()
+) {
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomBar(navController = navController) }
     ) {
         Box(Modifier.padding(it)) {
-            BottomNavGraph(navController = navController, signUpViewModel = signUpViewModel)
+            BottomNavGraph(navController = navController)
         }
     }
 }

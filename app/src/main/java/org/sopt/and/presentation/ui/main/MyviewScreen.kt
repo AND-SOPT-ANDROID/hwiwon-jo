@@ -13,19 +13,27 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.and.R
 import org.sopt.and.presentation.ui.main.component.MyPurchaseInfoCol
-import org.sopt.and.presentation.viewmodel.SignUpViewModel
+import org.sopt.and.presentation.viewmodel.MyviewViewModel
 
 
 @Composable
-fun MyviewScreen(signUpViewModel: SignUpViewModel) {
+fun MyviewScreen(
+    myviewViewModel: MyviewViewModel = hiltViewModel()
+) {
+    val hobbyResult by myviewViewModel.hobbyResult.observeAsState()
+
 
     Column(
         modifier = Modifier
@@ -44,14 +52,35 @@ fun MyviewScreen(signUpViewModel: SignUpViewModel) {
                     .size(60.dp)
                     .align(Alignment.CenterStart)
             )
-            Text(
-                text = signUpViewModel.email,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 85.dp),
-                fontSize = 10.sp,
-                color = Color.White
-            )
+
+            LaunchedEffect(Unit) {
+                myviewViewModel.getHobby()
+            }
+
+            hobbyResult?.let { result ->
+                if (result.isSuccess) {
+                    result.getOrNull()?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                                .padding(start = 85.dp),
+                            fontSize = 10.sp,
+                            color = Color.White
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "취미 가져오는데 실패..",
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 85.dp),
+                        fontSize = 10.sp,
+                        color = Color.White
+                    )
+                }
+            }
+            
 
             Text(
                 text = "🔔",
