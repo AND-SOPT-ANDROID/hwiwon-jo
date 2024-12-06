@@ -1,6 +1,6 @@
-package org.sopt.and.data.repository
+package org.sopt.and.data.repositoryimpl
 
-import org.sopt.and.data.api.HobbyService
+import org.sopt.and.data.di.HobbyService
 import javax.inject.Inject
 
 class MyviewRepository @Inject constructor(

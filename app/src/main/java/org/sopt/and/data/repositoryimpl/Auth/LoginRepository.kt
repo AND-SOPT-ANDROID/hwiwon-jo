@@ -1,8 +1,8 @@
-package org.sopt.and.data.repository.Auth
+package org.sopt.and.data.repositoryimpl.Auth
 
-import org.sopt.and.data.api.LoginService
-import org.sopt.and.data.dto.RequestLoginData
-import org.sopt.and.data.dto.ResponseLogin
+import org.sopt.and.data.di.LoginService
+import org.sopt.and.data.model.request.RequestLoginData
+import org.sopt.and.data.model.request.ResponseLogin
 import javax.inject.Inject
 
 class LoginRepository @Inject constructor(

@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.sopt.and.data.repository.MyviewRepository
-import org.sopt.and.data.repository.SharedPreferencesHelper
+import kotlinx.coroutines.withContext
+import org.sopt.and.data.repositoryimpl.MyviewRepository
+import org.sopt.and.data.repositoryimpl.SharedPreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,9 @@ class MyviewViewModel @Inject constructor(
         viewModelScope.launch {
             val token = getTokenForRequest()
             if (token != null) {
-                val result = myviewRepository.getHobby(token)
+                val result = withContext(Dispatchers.IO) {
+                    myviewRepository.getHobby(token)
+                }
                 _hobbyResult.postValue(result)
             } else {
                 _hobbyResult.postValue(Result.failure(Exception("토큰이 없습니다.")))
@@ -30,7 +34,7 @@ class MyviewViewModel @Inject constructor(
         }
     }
 
-    fun getTokenForRequest(): String? {
+    private fun getTokenForRequest(): String? {
         return sharedPreferencesHelper.getToken()
     }
 }

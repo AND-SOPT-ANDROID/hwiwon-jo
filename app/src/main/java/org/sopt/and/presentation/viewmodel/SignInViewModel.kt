@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.and.data.dto.RequestLoginData
-import org.sopt.and.data.dto.ResponseLogin
-import org.sopt.and.data.repository.Auth.LoginRepository
-import org.sopt.and.data.repository.SharedPreferencesHelper
+import org.sopt.and.data.model.request.RequestLoginData
+import org.sopt.and.data.model.request.ResponseLogin
+import org.sopt.and.data.repositoryimpl.Auth.LoginRepository
+import org.sopt.and.data.repositoryimpl.SharedPreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel

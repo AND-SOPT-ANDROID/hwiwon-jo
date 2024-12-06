@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.and.data.dto.RequestUserRegistrationData
-import org.sopt.and.data.dto.ResponseUserRegistration
-import org.sopt.and.data.repository.Auth.UserRegistrationRepository
+import org.sopt.and.data.model.request.RequestUserRegistrationData
+import org.sopt.and.data.model.request.ResponseUserRegistration
+import org.sopt.and.data.repositoryimpl.Auth.UserRegistrationRepository
 import javax.inject.Inject
 
 @HiltViewModel

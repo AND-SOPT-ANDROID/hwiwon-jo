@@ -1,6 +1,6 @@
-package org.sopt.and.data.api
+package org.sopt.and.data.di
 
-import org.sopt.and.data.dto.ResponseMyHobbyData
+import org.sopt.and.data.model.response.ResponseMyHobbyData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

@@ -1,8 +1,8 @@
-package org.sopt.and.data.repository.Auth
+package org.sopt.and.data.repositoryimpl.Auth
 
-import org.sopt.and.data.api.UserRegistrationService
-import org.sopt.and.data.dto.RequestUserRegistrationData
-import org.sopt.and.data.dto.ResponseUserRegistration
+import org.sopt.and.data.di.UserRegistrationService
+import org.sopt.and.data.model.request.RequestUserRegistrationData
+import org.sopt.and.data.model.request.ResponseUserRegistration
 import javax.inject.Inject
 
 class UserRegistrationRepository @Inject constructor(

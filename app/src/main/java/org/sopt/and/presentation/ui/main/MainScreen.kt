@@ -21,6 +21,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.sopt.and.navigation.BottomNavGraph
 import org.sopt.and.navigation.BottomNavItem
 import org.sopt.and.presentation.viewmodel.SignUpViewModel
 
