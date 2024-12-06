@@ -9,23 +9,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.and.data.model.request.RequestUserRegistrationData
-import org.sopt.and.data.model.request.ResponseUserRegistration
-import org.sopt.and.data.repositoryimpl.Auth.UserRegistrationRepository
+import org.sopt.and.data.repositoryimpl.UserRegistrationRepositoryImpl
+import org.sopt.and.domain.entity.UserEntity
+import org.sopt.and.domain.entity.UserNoEntity
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val userRegistrationRepository: UserRegistrationRepository
+    private val userRegistrationRepository: UserRegistrationRepositoryImpl
 ) : ViewModel() {
 
-    private val _userRegistrationResult = MutableLiveData<Result<ResponseUserRegistration>>()
-    val userRegistrationResult: LiveData<Result<ResponseUserRegistration>> get() = _userRegistrationResult
+    private val _userRegistrationResult = MutableLiveData<Result<UserNoEntity>>()
+    val userRegistrationResult: LiveData<Result<UserNoEntity>> get() = _userRegistrationResult
 
     fun registerUser(username: String, password: String, hobby: String) {
         viewModelScope.launch {
-            val userRequest = RequestUserRegistrationData(username, password, hobby)
-            val result = userRegistrationRepository.postUserRegistration(userRequest)
+            val userRequest = UserEntity(username, password, hobby)
+            val result = userRegistrationRepository.registerUser(userRequest)
             _userRegistrationResult.postValue(result)
         }
     }
