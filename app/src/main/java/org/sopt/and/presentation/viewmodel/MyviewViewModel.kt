@@ -8,8 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.sopt.and.data.repositoryimpl.MyviewRepository
 import org.sopt.and.data.repositoryimpl.SharedPreferencesHelper
+import org.sopt.and.domain.entity.HobbyEntity
+import org.sopt.and.domain.repository.MyviewRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,8 +18,8 @@ class MyviewViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
     private val myviewRepository: MyviewRepository
 ) : ViewModel() {
-    private val _hobbyResult = MutableLiveData<Result<String>>()
-    val hobbyResult: LiveData<Result<String>> get() = _hobbyResult
+    private val _hobbyResult = MutableLiveData<Result<HobbyEntity>>()
+    val hobbyResult: LiveData<Result<HobbyEntity>> get() = _hobbyResult
 
     fun getHobby() {
         viewModelScope.launch {
