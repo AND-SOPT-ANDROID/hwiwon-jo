@@ -1,13 +1,13 @@
 package org.sopt.and.data.repositoryimpl
 
-import org.sopt.and.data.datasource.MyviewDataSource
+import org.sopt.and.data.datasource.HobbyDataSource
 import org.sopt.and.data.mapper.HobbyMapper
 import org.sopt.and.domain.entity.HobbyEntity
 import org.sopt.and.domain.repository.MyviewRepository
 import javax.inject.Inject
 
 class MyviewRepositoryImpl @Inject constructor(
-    private val dataSource: MyviewDataSource
+    private val dataSource: HobbyDataSource
 ) : MyviewRepository {
     override suspend fun getHobby(
         token: String

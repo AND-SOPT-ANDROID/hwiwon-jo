@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MyviewResponseDto(
+data class HobbyResponseDto(
     @SerialName("result")
     val result: ResponseMyHobbyDataResult
 )
