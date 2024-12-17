@@ -59,9 +59,9 @@ fun MyviewScreen(
 
             hobbyResult?.let { result ->
                 if (result.isSuccess) {
-                    result.getOrNull()?.let {
+                    result.getOrNull()?.hobby?.let { hobbyResult ->
                         Text(
-                            text = it,
+                            text = hobbyResult,
                             modifier = Modifier
                                 .align(Alignment.CenterStart)
                                 .padding(start = 85.dp),
@@ -80,7 +80,7 @@ fun MyviewScreen(
                     )
                 }
             }
-            
+
 
             Text(
                 text = "🔔",

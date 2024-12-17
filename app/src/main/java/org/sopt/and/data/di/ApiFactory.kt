@@ -1,4 +1,4 @@
-package org.sopt.and.data.api
+package org.sopt.and.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.and.BuildConfig
+import org.sopt.and.data.service.AuthService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -41,20 +42,9 @@ object ApiFactory {
 
     @Provides
     @Singleton
-    fun provideUserRegistrationService(retrofit: Retrofit): UserRegistrationService {
-        return retrofit.create(UserRegistrationService::class.java)
+    fun provideAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService {
-        return retrofit.create(LoginService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideHobbyService(retrofit: Retrofit): HobbyService {
-        return retrofit.create(HobbyService::class.java)
-    }
 
 }

@@ -1,4 +1,4 @@
-package org.sopt.and.data.repository
+package org.sopt.and.data.repositoryimpl
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -31,4 +31,5 @@ class SharedPreferencesHelper(context: Context) {
     fun getToken(): String? {
         return prefs.getString("auth_token", null)
     }
+
 }

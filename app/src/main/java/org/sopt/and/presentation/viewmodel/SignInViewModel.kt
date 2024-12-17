@@ -1,6 +1,5 @@
 package org.sopt.and.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,10 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.and.data.dto.RequestLoginData
-import org.sopt.and.data.dto.ResponseLogin
-import org.sopt.and.data.repository.Auth.LoginRepository
-import org.sopt.and.data.repository.SharedPreferencesHelper
+import org.sopt.and.data.repositoryimpl.SharedPreferencesHelper
+import org.sopt.and.domain.entity.LoginEntity
+import org.sopt.and.domain.entity.TokenEntity
+import org.sopt.and.domain.repository.LoginRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,17 +21,15 @@ class SignInViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
-    private val _loginResult = MutableLiveData<Result<ResponseLogin>>()
-    val loginResult: LiveData<Result<ResponseLogin>> get() = _loginResult
+    private val _loginResult = MutableLiveData<Result<TokenEntity>>()
+    val loginResult: LiveData<Result<TokenEntity>> get() = _loginResult
 
     fun postLogin(username: String, password: String) {
         viewModelScope.launch {
-            val loginRequest = RequestLoginData(username, password)
-            val result = loginRepository.postLogin(loginRequest)
-            result.onSuccess {
-                val token = it.result.token
-                saveToken(token)
-                Log.d("SignInResultViewModel", "토큰이 저장됐을까.. $token")
+            val loginEntity = LoginEntity(username = username, password = password)
+            val result = loginRepository.postLogin(loginEntity)
+            result.onSuccess { tokenEntity ->
+                saveToken(tokenEntity.token)
             }
             _loginResult.postValue(result)
         }

@@ -1,11 +1,10 @@
-package org.sopt.and.data.dto
+package org.sopt.and.data.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/* 내 취미 조회 */
 @Serializable
-data class ResponseMyHobbyData(
+data class MyviewResponseDto(
     @SerialName("result")
     val result: ResponseMyHobbyDataResult
 )
