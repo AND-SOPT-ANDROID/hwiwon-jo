@@ -55,6 +55,7 @@ class SignUpViewModel @Inject constructor(
                 .onSuccess {
                     updateState { copy(isLoading = false, isSuccess = true) }
                     _sideEffect.emit(SignUpSideEffect.ShowToast("회원가입 성공!"))
+                    _sideEffect.emit(SignUpSideEffect.NavigateToSignIn)
                 }
                 .onFailure { error ->
                     updateState { copy(isLoading = false, errorMessage = error.message) }

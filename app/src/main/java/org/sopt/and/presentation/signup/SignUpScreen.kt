@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
+import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
 import org.sopt.and.presentation.ui.auth.component.AuthTextField
 import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
@@ -43,8 +44,7 @@ import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel: SignUpViewModel = hiltViewModel(),
-    navController: NavHostController
+    signUpViewModel: SignUpViewModel = hiltViewModel(), navController: NavHostController
 ) {
 
     val state by signUpViewModel.state.collectAsState()
@@ -55,10 +55,12 @@ fun SignUpScreen(
         sideEffect.collect { effect ->
             when (effect) {
                 is SignUpSideEffect.ShowToast -> Toast.makeText(
-                    context,
-                    effect.message,
-                    Toast.LENGTH_SHORT
+                    context, effect.message, Toast.LENGTH_SHORT
                 ).show()
+
+                is SignUpSideEffect.NavigateToSignIn -> {
+                    navController.navigate(AuthNavItem.SignIn.route)
+                }
             }
         }
     }
@@ -87,8 +89,7 @@ fun SignUpScreen(
                 Icons.Default.Close,
                 tint = Color.White,
                 contentDescription = "close",
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
+                modifier = Modifier.align(Alignment.CenterEnd)
             )
         }
         Column(
@@ -97,14 +98,10 @@ fun SignUpScreen(
                 .fillMaxWidth()
         ) {
             val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium))
-                { append("이메일과 비밀번호") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight))
-                { append("만으로\n") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium))
-                { append("Wavve를 즐길 수 ") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight))
-                { append("있어요!") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) { append("이메일과 비밀번호") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight)) { append("만으로\n") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) { append("Wavve를 즐길 수 ") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight)) { append("있어요!") }
             }
             Text(
                 modifier = Modifier.padding(start = 15.dp, top = 30.dp, end = 15.dp),
@@ -138,8 +135,7 @@ fun SignUpScreen(
                     TextButton(
                         onClick = {
                             signUpViewModel.processIntent(SignUpIntent.TogglePasswordVisibility)
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
+                        }, modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
                             text = if (state.isPasswordVisible) "Hide" else "Show",
