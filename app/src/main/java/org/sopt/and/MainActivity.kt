@@ -12,8 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import org.sopt.and.navigation.AuthNavItem
+import org.sopt.and.presentation.signIn.SignInScreen
 import org.sopt.and.presentation.signup.SignUpScreen
-import org.sopt.and.presentation.ui.auth.SignInScreen
 import org.sopt.and.presentation.ui.main.MainScreen
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 

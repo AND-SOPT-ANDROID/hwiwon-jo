@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun AuthButton(
     text: String = "",
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
