@@ -1,4 +1,4 @@
-package org.sopt.and.presentation.ui.auth.component
+package org.sopt.and.presentation.ui.component.auth
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

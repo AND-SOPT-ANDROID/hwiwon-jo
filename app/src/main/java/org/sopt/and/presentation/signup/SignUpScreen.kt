@@ -36,10 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
-import org.sopt.and.presentation.ui.auth.component.AuthTextField
-import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
-import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
+import org.sopt.and.presentation.ui.component.auth.AuthServiceDescription
+import org.sopt.and.presentation.ui.component.auth.AuthTextField
+import org.sopt.and.presentation.ui.component.auth.ServiceIconRow
+import org.sopt.and.presentation.ui.component.auth.TextFieldValidateResult
 
 
 @Composable
