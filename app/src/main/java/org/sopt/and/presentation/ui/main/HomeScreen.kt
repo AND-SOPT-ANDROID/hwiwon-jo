@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.sopt.and.R
-import org.sopt.and.presentation.ui.main.component.HomeContentList
+import org.sopt.and.presentation.ui.component.main.HomeContentList
 
 @Composable
 fun HomeScreen() {

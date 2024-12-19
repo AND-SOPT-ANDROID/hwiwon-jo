@@ -13,7 +13,12 @@ class LoginDataSourceImpl @Inject constructor(
         return try {
             val response = authService.postLogin(requestData)
             if (response.isSuccessful) {
-                Result.success(response.body()!!)
+                val body = response.body()
+                if (body != null) {
+                    Result.success(body);
+                } else {
+                    Result.failure(Exception("로그인 응답 null"))
+                }
             } else {
                 val errorCode = response.errorBody()?.string() ?: "알수없슴"
                 Result.failure(Exception("Error code : ${response.code()}, 에러 코드 : $errorCode"))

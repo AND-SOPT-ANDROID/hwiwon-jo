@@ -1,4 +1,4 @@
-package org.sopt.and.presentation.ui.auth.component
+package org.sopt.and.presentation.ui.component.auth
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun AuthButton(
     text: String = "",
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,

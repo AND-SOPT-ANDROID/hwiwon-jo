@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.and.R
-import org.sopt.and.presentation.ui.main.component.MyPurchaseInfoCol
+import org.sopt.and.presentation.ui.component.main.MyPurchaseInfoCol
 import org.sopt.and.presentation.viewmodel.MyviewViewModel
 
 

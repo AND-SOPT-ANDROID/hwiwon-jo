@@ -1,6 +1,6 @@
-package org.sopt.and.presentation.ui.auth
+package org.sopt.and.presentation.signup
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,22 +36,34 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.navigation.AuthNavItem
-import org.sopt.and.presentation.ui.auth.component.AuthServiceDescription
-import org.sopt.and.presentation.ui.auth.component.AuthTextField
-import org.sopt.and.presentation.ui.auth.component.ServiceIconRow
-import org.sopt.and.presentation.ui.auth.component.TextFieldValidateResult
-import org.sopt.and.presentation.utils.showToast
-import org.sopt.and.presentation.viewmodel.SignUpViewModel
+import org.sopt.and.presentation.ui.component.auth.AuthServiceDescription
+import org.sopt.and.presentation.ui.component.auth.AuthTextField
+import org.sopt.and.presentation.ui.component.auth.ServiceIconRow
+import org.sopt.and.presentation.ui.component.auth.TextFieldValidateResult
 
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel: SignUpViewModel = hiltViewModel(),
-    navController: NavHostController
+    signUpViewModel: SignUpViewModel = hiltViewModel(), navController: NavHostController
 ) {
 
-    val signUpResult by signUpViewModel.userRegistrationResult.observeAsState()
+    val state by signUpViewModel.state.collectAsState()
+    val sideEffect = signUpViewModel.sideEffect
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        sideEffect.collect { effect ->
+            when (effect) {
+                is SignUpSideEffect.ShowToast -> Toast.makeText(
+                    context, effect.message, Toast.LENGTH_SHORT
+                ).show()
+
+                is SignUpSideEffect.NavigateToSignIn -> {
+                    navController.navigate(AuthNavItem.SignIn.route)
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -77,8 +89,7 @@ fun SignUpScreen(
                 Icons.Default.Close,
                 tint = Color.White,
                 contentDescription = "close",
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
+                modifier = Modifier.align(Alignment.CenterEnd)
             )
         }
         Column(
@@ -87,14 +98,10 @@ fun SignUpScreen(
                 .fillMaxWidth()
         ) {
             val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium))
-                { append("이메일과 비밀번호") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight))
-                { append("만으로\n") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium))
-                { append("Wavve를 즐길 수 ") }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight))
-                { append("있어요!") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) { append("이메일과 비밀번호") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight)) { append("만으로\n") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) { append("Wavve를 즐길 수 ") }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraLight)) { append("있어요!") }
             }
             Text(
                 modifier = Modifier.padding(start = 15.dp, top = 30.dp, end = 15.dp),
@@ -108,31 +115,30 @@ fun SignUpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
-                value = signUpViewModel.username,
-                onValueChange = { signUpViewModel.username = it },
+                value = state.email,
+                onValueChange = { signUpViewModel.processIntent(SignUpIntent.EnterUsername(it)) },
                 placeholder = "wavve@example.com",
                 validateState = TextFieldValidateResult.Basic,
                 infoDescription = stringResource(R.string.signup_username_description)
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
-                value = signUpViewModel.password,
-                onValueChange = { signUpViewModel.password = it },
+                value = state.password,
+                onValueChange = { signUpViewModel.processIntent(SignUpIntent.EnterPassword(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 20.dp, end = 15.dp),
                 placeholder = "ex) abcdEFG123",
                 validateState = TextFieldValidateResult.Basic,
-                visualTransformation = if (signUpViewModel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     TextButton(
                         onClick = {
-                            signUpViewModel.isPasswordVisible = !signUpViewModel.isPasswordVisible
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
+                            signUpViewModel.processIntent(SignUpIntent.TogglePasswordVisibility)
+                        }, modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            text = if (signUpViewModel.isPasswordVisible) "Hide" else "Show",
+                            text = if (state.isPasswordVisible) "Hide" else "Show",
                             color = Color.White,
                             fontWeight = FontWeight.Normal
                         )
@@ -145,8 +151,8 @@ fun SignUpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 15.dp, top = 30.dp, end = 15.dp),
-                value = signUpViewModel.hobby,
-                onValueChange = { signUpViewModel.hobby = it },
+                value = state.hobby,
+                onValueChange = { signUpViewModel.processIntent(SignUpIntent.EnterHobby(it)) },
                 placeholder = "ex) 음악 감상",
                 validateState = TextFieldValidateResult.Basic,
                 infoDescription = stringResource(R.string.signup_hobby_description)
@@ -158,20 +164,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
-                    if (signUpViewModel.validateSignUp(
-                            signUpViewModel.username,
-                            signUpViewModel.password,
-                            signUpViewModel.hobby
-                        )
-                    ) {
-                        signUpViewModel.registerUser(
-                            signUpViewModel.username,
-                            signUpViewModel.password,
-                            signUpViewModel.hobby
-                        )
-                    } else {
-                        context.showToast(context, "회원가입 조건에 부합하지 않습니다.")
-                    }
+                    signUpViewModel.processIntent(SignUpIntent.SubmitSignUp)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,20 +178,6 @@ fun SignUpScreen(
                     textAlign = TextAlign.Center
                 )
             }
-
-            signUpResult?.let { result ->
-                if (result.isSuccess) {
-                    LaunchedEffect(Unit) {
-                        context.showToast(context, "회원가입 성공!")
-                        navController.navigate(AuthNavItem.SignIn.route)
-                    }
-                } else {
-                    val errorMessage = result.exceptionOrNull()?.message ?: "회원가입 실패"
-                    Log.e("signupscreen", errorMessage)
-                    context.showToast(context, errorMessage)
-                }
-            }
-
         }
     }
 }
