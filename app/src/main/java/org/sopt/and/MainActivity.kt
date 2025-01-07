@@ -15,7 +15,7 @@ import org.sopt.and.navigation.AuthNavItem
 import org.sopt.and.presentation.signIn.SignInScreen
 import org.sopt.and.presentation.signup.SignUpScreen
 import org.sopt.and.presentation.ui.main.MainScreen
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.ui.theme.MEMENTOTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ANDANDROIDTheme {
+            MEMENTOTheme {
                 MyAppScreen()
             }
         }
